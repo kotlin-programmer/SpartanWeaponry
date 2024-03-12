@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 public class Defaults
 {
 	// Default config options
-	public static final String ModVersion = "@VERSION@";
+	public static final String ModVersion = "1.6.0";
 	
 	// Materials
 	public static final float MaterialDamageCopper = 1.5f;

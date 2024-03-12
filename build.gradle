@@ -1,52 +1,42 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-		maven { url = 'https://repo.spongepowered.org/maven' }
+		maven {
+			url = 'https://maven.minecraftforge.net/'
+		}
+		maven {
+			url = 'https://repo.spongepowered.org/maven'
+		}
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
+		classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+	}
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = "${mc_version}-${mod_version}"
+version = "${minecraft_version}-${mod_version}"
 group= "${package_group}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${mod_name}"
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = "1.8"
 
 minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
-	coreMod = "com.oblivioussp.spartanweaponry.mixin.MixinLoader"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_39"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-	
-	replace "@VERSION@", "${mod_version_int}"
-	replaceIn "Defaults.java"
+	mappings channel: mappings_channel, version: mappings_version
+	accessTransformer = file("src/main/resources/spartanweaponry_at.cfg")
 }
 
 repositories {
-	maven { 	url = "http://dvs1.progwml6.com/files/maven" }
-//	maven {
-//		name = "CurseForge"
-//		url = "https://minecraft.curseforge.com/api/maven/"
-//	}
-	maven { url = 'https://repo.spongepowered.org/maven' }
+	mavenCentral()
+	maven {
+		url = 'https://maven.minecraftforge.net/'
+	}
+	maven {
+		url = 'https://repo.spongepowered.org/maven'
+	}
 	maven {
 		name = "CurseMaven"
 		url = "https://cursemaven.com/"
@@ -62,64 +52,21 @@ configurations {
 }
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+	annotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
 
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-	
-	deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"	// compile against the JEI API
-//	deobfCompile "baubles:Baubles:1.12:1.5.2"
-//	deobfCompile "trinkets-and-baubles:Trinkets and Baubles:0.31.4"
-//	
-	
-//	deobfCompile "ignore:Trinkets and Baubles:0.31.3"
-	deobfCompile "curse.maven:baubles-227083:2518667"
-	deobfCompile "curse.maven:trinkets-and-baubles-279900:3604719"
-	deobfCompile "ignore:potioncore:1.9_for_1.12.2"
-	deobfCompile "ignore:qualitytools:1.0.7_for_1.12.2"
-	deobfCompile "ignore:reachfix:1.12.2-1.0.7-rc2"
-	deobfCompile "ignore:rlcombat:1.12.2-2.0.5"
-	deobfCompile "ignore:spartanhudbaubles:1.12.2-1.0.0"
-	deobfCompile "ignore:somanyenchantments:0.5.5"
-	
-	// at runtime, use the full JEI jar
-	runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-
-//	if("${embed_mixin}")
-//	{
-		embed("org.spongepowered:mixin:${mixin_version}") 
-		{ 
-			transitive = false
-			exclude module: 'asm-commons'
-			exclude module: 'asm-tree'
-			exclude module: 'launchwrapper'
-			exclude module: 'log4j-core'
-			exclude module: 'guava'
-			exclude module: 'commons-io'
-			exclude module: 'gson'
-		}
-//	}
-//	else
-//	{
-//		compile "org.spongepowered:mixin:${mixin_version}"
-//		deobfCompile "curse.maven:mixinbootstrap-357178:3437402"
-//	}
+	implementation "org.spongepowered:mixin:${mixin_version}"
+	implementation fg.deobf("curse.maven:baubles-227083:2518667")
+	implementation fg.deobf("curse.maven:trinkets-and-baubles-279900:3604719")
+	implementation fg.deobf("curse.maven:potioncore-242872:2905184")
+	implementation fg.deobf("curse.maven:quality-tools-264756:2732994")
+	implementation fg.deobf("curse.maven:reach-fix-556777:4344825")
+	implementation fg.deobf("curse.maven:rlcombat-711714:4341524")
+	implementation fg.deobf("curse.maven:spartan-hud-baubles-557117:3566426")
+	implementation fg.deobf("curse.maven:somanyenchantments-267035:3574478")
+	implementation fg.deobf("curse.maven:jei-238222:2578467")
+	implementation fg.deobf("curse.maven:mixinbootstrap-357178:3437402")
 }
 
 sourceSets {
@@ -144,22 +91,13 @@ jar {
 }
 
 processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+	inputs.property "version", project.version
+	inputs.property "mcversion", minecraft_version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':"${mod_version}", 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-	
+	filesMatching('mcmod.info') {
+		expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': mod_version,
+				'mcversion': minecraft_version
+	}
+
 	rename '(.+_at.cfg)', 'META-INF/$1'
 }
