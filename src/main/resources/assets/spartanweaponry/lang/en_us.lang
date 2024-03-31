@@ -705,6 +705,7 @@ config.spartanweaponry:fuseTicksDynamite=Dynamite: Fuse Ticks
 
 config.spartanweaponry:category.weapon_properties=Weapon Properties
 config.spartanweaponry:damageBonusChestMultiplier=Chest Damage Bonus: Multiplier
+config.spartanweaponry:damageBonusHeadMultiplier=Head Damage Bonus: Multiplier
 config.spartanweaponry:damageBonusRidingMultiplier=Riding Damage Bonus: Multiplier
 config.spartanweaponry:damageBonusRidingCheckSpeed=Riding Damage Bonus: Enable Speed Check
 config.spartanweaponry:damageBonusRidingVelocityMax=Riding Damage Bonus: Speed for Max Bonus
@@ -725,6 +726,7 @@ config.spartanweaponry:reach2Value=Reach II: Reach Value
 config.spartanweaponry:sweep1Percentage=Sweep I: Sweep Damage Percentage
 config.spartanweaponry:sweep2Percentage=Sweep II: Sweep Damage Percentage
 config.spartanweaponry:wideSweepPercentage=Wide Sweep: Sweep Damage Percentage
+config.spartanweaponry:wideSweepAdditionalRange=Wide Sweep: Additional Range
 config.spartanweaponry:armorPiercePercentage=Armor Pierce: Pierce Percentage
 config.spartanweaponry:quickStrikeHurtResistTicks=Quick Strike: Hurt Resistance Ticks
 

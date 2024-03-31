@@ -223,7 +223,7 @@ public class Defaults
 	// Weapon Property related
 	public static final int QuickStrikeHurtResistTicks = 14;
 	public static final float DamageBonusChestMultiplier = 2.0f;
-	public static final float DamageBonusHeadMultiplier = 2.0f;
+	public static final float DamageBonusHeadMultiplier = 1.5f;
 	public static final float DamageBonusRidingMultiplier = 2.0f;
 	public static final float DamageBonusRidingSpeedMax = 0.225f;		// Average horse speed will result in max damage
 	public static final float DamageBonusThrowMultiplier = 2.0f;

@@ -26,6 +26,7 @@ import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
@@ -171,14 +172,22 @@ public class WeaponHelper
                             player.motionZ *= 0.6D;
                             player.setSprinting(false);
                         }
+
+                        WeaponProperty sweepProp = weaponItem.getFirstWeaponPropertyWithType(WeaponProperties.PROPERTY_TYPE_WIDE_SWEEP);
                         
-                        WeaponProperty sweepProp = weaponItem.getFirstWeaponPropertyWithType(WeaponProperties.PROPERTY_TYPE_SWEEP_DAMAGE);
+                        if(sweepProp == null)
+                        	sweepProp = weaponItem.getFirstWeaponPropertyWithType(WeaponProperties.PROPERTY_TYPE_SWEEP_DAMAGE);
 
                         if (flag3 && sweepProp != null)
                         {
                         	float sweepDamage = damage * (sweepProp.getMagnitude() / 100.0f);
                         	
-                            for (EntityLivingBase entitylivingbase : player.world.getEntitiesWithinAABB(EntityLivingBase.class, targetEntity.getEntityBoundingBox().grow(1.0D, 0.25D, 1.0D)))
+                        	AxisAlignedBB sweepBox = targetEntity.getEntityBoundingBox().grow(1.0D, 0.25D, 1.0D);
+                        	
+                        	if(sweepProp.getType() == WeaponProperties.PROPERTY_TYPE_WIDE_SWEEP)
+                        		sweepBox.grow(ConfigHandler.wideSweepAdditionalRange);
+                        	
+                            for (EntityLivingBase entitylivingbase : player.world.getEntitiesWithinAABB(EntityLivingBase.class, sweepBox))
                             {
                                 if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isOnSameTeam(entitylivingbase) && player.getDistanceSq(entitylivingbase) < reach * reach)
                                 {
